@@ -1,35 +1,31 @@
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 
 interface ProjectCardProps {
+  id: number;
   name: string;
   date: string;
-  status: "completed" | "in-progress";
   onViewResults: () => void;
   onRecalculate: () => void;
 }
 
-export function ProjectCard({ name, date, status, onViewResults, onRecalculate }: ProjectCardProps) {
+export function ProjectCard({ name, date, onViewResults, onRecalculate }: ProjectCardProps) {
   return (
-    <Card className="glass-card hover-lift w-full max-w-md">
+    <Card className="glass-card animate-fadeIn">
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-xl font-medium">{name}</CardTitle>
-          <Badge variant={status === "completed" ? "default" : "secondary"}>
-            {status === "completed" ? "Completed" : "In Progress"}
-          </Badge>
-        </div>
+        <CardTitle>{name}</CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-muted-foreground">Created on {date}</p>
+        <p className="text-sm text-muted-foreground mb-4">Created on {date}</p>
+        <div className="flex justify-end space-x-2">
+          <Button variant="outline" onClick={onViewResults}>
+            Show Results
+          </Button>
+          <Button onClick={onRecalculate}>
+            Recalculate
+          </Button>
+        </div>
       </CardContent>
-      <CardFooter className="flex justify-end gap-3">
-        <Button variant="outline" onClick={onRecalculate}>
-          Recalculate
-        </Button>
-        <Button onClick={onViewResults}>View Results</Button>
-      </CardFooter>
     </Card>
   );
 }

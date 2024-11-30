@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 interface ResultsViewProps {
   fpa: {
@@ -20,14 +20,6 @@ interface ResultsViewProps {
 }
 
 export function ResultsView({ fpa, cocomo }: ResultsViewProps) {
-  const chartData = [
-    { name: "External Inputs", value: fpa.ei },
-    { name: "External Outputs", value: fpa.eo },
-    { name: "External Inquiries", value: fpa.eq },
-    { name: "Internal Files", value: fpa.ilf },
-    { name: "External Files", value: fpa.eif },
-  ];
-
   return (
     <div className="space-y-6 animate-fadeIn">
       <Card className="glass-card">
@@ -35,21 +27,40 @@ export function ResultsView({ fpa, cocomo }: ResultsViewProps) {
           <CardTitle>Function Point Analysis</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="h-64 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData}>
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="value" fill="hsl(var(--primary))" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="mt-4 text-center">
-            <p className="text-2xl font-semibold">
-              Total Function Points: {fpa.total}
-            </p>
-          </div>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Metric</TableHead>
+                <TableHead className="text-right">Value</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell>External Inputs (EI)</TableCell>
+                <TableCell className="text-right">{fpa.ei}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>External Outputs (EO)</TableCell>
+                <TableCell className="text-right">{fpa.eo}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>External Inquiries (EQ)</TableCell>
+                <TableCell className="text-right">{fpa.eq}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Internal Logical Files (ILF)</TableCell>
+                <TableCell className="text-right">{fpa.ilf}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>External Interface Files (EIF)</TableCell>
+                <TableCell className="text-right">{fpa.eif}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className="font-medium">Total Function Points</TableCell>
+                <TableCell className="text-right font-medium">{fpa.total}</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
 
