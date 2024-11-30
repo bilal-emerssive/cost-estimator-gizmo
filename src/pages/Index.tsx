@@ -11,12 +11,12 @@ const mockProjects = [
 ];
 
 const mockDrivers = [
-  { id: "rely", name: "Required Reliability", category: "Product Attributes", value: 1.0 },
-  { id: "data", name: "Database Size", category: "Product Attributes", value: 1.0 },
-  { id: "cplx", name: "Product Complexity", category: "Product Attributes", value: 1.0, systemGenerated: true },
-  { id: "time", name: "Time Constraint", category: "Platform Attributes", value: 1.0 },
-  { id: "stor", name: "Storage Constraint", category: "Platform Attributes", value: 1.0 },
-  { id: "pvol", name: "Platform Volatility", category: "Platform Attributes", value: 1.0 },
+  { id: "rely", name: "Required Reliability", category: "Product Attributes", value: 1.0, isManual: false },
+  { id: "data", name: "Database Size", category: "Product Attributes", value: 1.0, isManual: false },
+  { id: "cplx", name: "Product Complexity", category: "Product Attributes", value: 1.0, isManual: false },
+  { id: "time", name: "Time Constraint", category: "Platform Attributes", value: 1.0, isManual: false },
+  { id: "stor", name: "Storage Constraint", category: "Platform Attributes", value: 1.0, isManual: false },
+  { id: "pvol", name: "Platform Volatility", category: "Platform Attributes", value: 1.0, isManual: false },
 ];
 
 const mockResults = {
@@ -43,6 +43,10 @@ export default function Index() {
 
   const handleDriverChange = (id: string, value: number) => {
     console.log(`Driver ${id} changed to ${value}`);
+  };
+
+  const handleModeChange = (id: string, isManual: boolean) => {
+    console.log(`Driver ${id} mode changed to ${isManual ? 'manual' : 'system'}`);
   };
 
   const handleProcess = () => {
@@ -86,7 +90,11 @@ export default function Index() {
         {step === 2 && !showResults && (
           <div className="space-y-8 animate-fadeIn">
             <FileUpload />
-            <CostDrivers drivers={mockDrivers} onValueChange={handleDriverChange} />
+            <CostDrivers 
+              drivers={mockDrivers} 
+              onValueChange={handleDriverChange}
+              onModeChange={handleModeChange}
+            />
             <div className="flex justify-center">
               <Button
                 size="lg"
