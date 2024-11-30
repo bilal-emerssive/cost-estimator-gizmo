@@ -64,8 +64,10 @@ export function CostDrivers({ drivers, onValueChange, onModeChange }: CostDriver
                     <Label htmlFor={driver.id}>{driver.name}</Label>
                   </div>
                   <RadioGroup
-                    value={driver.isManual ? "manual" : "system"}
-                    onValueChange={(value) => onModeChange(driver.id, value === "manual")}
+                    defaultValue="system"
+                    onValueChange={(value) => {
+                      onModeChange(driver.id, value === "manual");
+                    }}
                     className="flex space-x-4 mb-4"
                   >
                     <div className="flex items-center space-x-2">
