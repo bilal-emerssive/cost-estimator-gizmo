@@ -39,11 +39,14 @@ export function CostDrivers({ drivers, onValueChange, onModeChange }: CostDriver
     { id: "ltex", name: "Language and Tool Experience", category: "Personnel Attributes" },
     { id: "tool", name: "Use of Software Tools", category: "Project Attributes" },
     { id: "sced", name: "Development Schedule", category: "Project Attributes" }
-  ].map(d => ({
-    ...d,
-    value: drivers.find(existing => existing.id === d.id)?.value || 1.0,
-    isManual: drivers.find(existing => existing.id === d.id)?.isManual || false
-  }));
+  ].map(d => {
+    const existingDriver = drivers.find(existing => existing.id === d.id);
+    return {
+      ...d,
+      value: existingDriver?.value || 1.0,
+      isManual: existingDriver?.isManual || false
+    };
+  });
 
   return (
     <div className="grid gap-6 md:grid-cols-2">
@@ -61,7 +64,7 @@ export function CostDrivers({ drivers, onValueChange, onModeChange }: CostDriver
                     <Label htmlFor={driver.id}>{driver.name}</Label>
                   </div>
                   <RadioGroup
-                    defaultValue={driver.isManual ? "manual" : "system"}
+                    value={driver.isManual ? "manual" : "system"}
                     onValueChange={(value) => onModeChange(driver.id, value === "manual")}
                     className="flex space-x-4 mb-4"
                   >
