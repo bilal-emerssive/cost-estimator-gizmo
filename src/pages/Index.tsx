@@ -6,8 +6,8 @@ import { ResultsView } from "@/components/ResultsView";
 import { ProjectCard } from "@/components/ProjectCard";
 
 const mockProjects = [
-  { id: 1, name: "E-Commerce Platform", date: "2024-02-20", status: "completed" as const },
-  { id: 2, name: "CRM System", date: "2024-02-15", status: "in-progress" as const },
+  { id: 1, name: "E-Commerce Platform", date: "2024-02-20" },
+  { id: 2, name: "CRM System", date: "2024-02-15" },
 ];
 
 const mockDrivers = [
@@ -53,6 +53,11 @@ export default function Index() {
     setShowResults(true);
   };
 
+  const handleRecalculate = () => {
+    setStep(2);
+    setShowResults(false);
+  };
+
   return (
     <div className="min-h-screen bg-cost-100 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-8">
@@ -71,7 +76,7 @@ export default function Index() {
                   key={project.id}
                   {...project}
                   onViewResults={() => setShowResults(true)}
-                  onRecalculate={() => setStep(2)}
+                  onRecalculate={handleRecalculate}
                 />
               ))}
             </div>

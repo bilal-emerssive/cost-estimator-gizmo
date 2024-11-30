@@ -69,28 +69,36 @@ export function ResultsView({ fpa, cocomo }: ResultsViewProps) {
           <CardTitle>COCOMO Estimates</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            <div className="p-4 rounded-lg bg-primary/5">
-              <p className="text-sm text-muted-foreground">Estimated KLOC</p>
-              <p className="text-2xl font-semibold">{cocomo.kloc}</p>
-            </div>
-            <div className="p-4 rounded-lg bg-primary/5">
-              <p className="text-sm text-muted-foreground">Effort (Person-Months)</p>
-              <p className="text-2xl font-semibold">{cocomo.effort}</p>
-            </div>
-            <div className="p-4 rounded-lg bg-primary/5">
-              <p className="text-sm text-muted-foreground">Total Effort Multiplier</p>
-              <p className="text-2xl font-semibold">{cocomo.multiplier}</p>
-            </div>
-            <div className="p-4 rounded-lg bg-primary/5">
-              <p className="text-sm text-muted-foreground">Estimated Cost</p>
-              <p className="text-2xl font-semibold">${cocomo.cost.toLocaleString()}</p>
-            </div>
-            <div className="p-4 rounded-lg bg-primary/5">
-              <p className="text-sm text-muted-foreground">Development Time</p>
-              <p className="text-2xl font-semibold">{cocomo.time} months</p>
-            </div>
-          </div>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Metric</TableHead>
+                <TableHead className="text-right">Value</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell>Estimated KLOC</TableCell>
+                <TableCell className="text-right">{cocomo.kloc}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Effort (Person-Months)</TableCell>
+                <TableCell className="text-right">{cocomo.effort}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Total Effort Multiplier</TableCell>
+                <TableCell className="text-right">{cocomo.multiplier}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Estimated Cost</TableCell>
+                <TableCell className="text-right">${cocomo.cost.toLocaleString()}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Development Time</TableCell>
+                <TableCell className="text-right">{cocomo.time} months</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
     </div>
