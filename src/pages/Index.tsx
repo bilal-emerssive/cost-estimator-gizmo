@@ -11,12 +11,26 @@ const mockProjects = [
 ];
 
 const mockDrivers = [
+  // Product Attributes
   { id: "rely", name: "Required Reliability", category: "Product Attributes", value: 1.0, isManual: false },
   { id: "data", name: "Database Size", category: "Product Attributes", value: 1.0, isManual: false },
   { id: "cplx", name: "Product Complexity", category: "Product Attributes", value: 1.0, isManual: false },
+  
+  // Platform Attributes
   { id: "time", name: "Time Constraint", category: "Platform Attributes", value: 1.0, isManual: false },
   { id: "stor", name: "Storage Constraint", category: "Platform Attributes", value: 1.0, isManual: false },
   { id: "pvol", name: "Platform Volatility", category: "Platform Attributes", value: 1.0, isManual: false },
+  
+  // Personnel Attributes
+  { id: "acap", name: "Analyst Capability", category: "Personnel Attributes", value: 1.0, isManual: false },
+  { id: "pcap", name: "Programmer Capability", category: "Personnel Attributes", value: 1.0, isManual: false },
+  { id: "aexp", name: "Application Experience", category: "Personnel Attributes", value: 1.0, isManual: false },
+  { id: "pexp", name: "Platform Experience", category: "Personnel Attributes", value: 1.0, isManual: false },
+  { id: "ltex", name: "Language and Tool Experience", category: "Personnel Attributes", value: 1.0, isManual: false },
+  
+  // Project Attributes
+  { id: "tool", name: "Use of Software Tools", category: "Project Attributes", value: 1.0, isManual: false },
+  { id: "sced", name: "Development Schedule", category: "Project Attributes", value: 1.0, isManual: false },
 ];
 
 const mockResults = {
@@ -40,13 +54,22 @@ const mockResults = {
 export default function Index() {
   const [step, setStep] = useState(1);
   const [showResults, setShowResults] = useState(false);
+  const [drivers, setDrivers] = useState(mockDrivers);
 
   const handleDriverChange = (id: string, value: number) => {
-    console.log(`Driver ${id} changed to ${value}`);
+    setDrivers(prevDrivers => 
+      prevDrivers.map(driver => 
+        driver.id === id ? { ...driver, value } : driver
+      )
+    );
   };
 
-  const handleModeChange = (id: string, isManual: boolean) => {
-    console.log(`Driver ${id} mode changed to ${isManual ? 'manual' : 'system'}`);
+   const handleModeChange = (id: string, isManual: boolean) => {
+    setDrivers(prevDrivers => 
+      prevDrivers.map(driver => 
+        driver.id === id ? { ...driver, isManual } : driver
+      )
+    );
   };
 
   const handleProcess = () => {
@@ -96,10 +119,10 @@ export default function Index() {
           <div className="space-y-8 animate-fadeIn">
             <FileUpload />
             <CostDrivers 
-              drivers={mockDrivers} 
-              onValueChange={handleDriverChange}
-              onModeChange={handleModeChange}
-            />
+      drivers={drivers} 
+      onValueChange={handleDriverChange}
+      onModeChange={handleModeChange}
+    />
             <div className="flex justify-center">
               <Button
                 size="lg"
