@@ -112,7 +112,7 @@ export function CostDrivers({ drivers, onValueChange, onModeChange }: CostDriver
                         ))}
                       </div>
                       <span className="text-sm text-muted-foreground block text-center mt-2">
-                        Current Rating: {getRatingLabel(driver.value)} ({driver.value.toFixed(1)})
+                        Current Rating: {getRatingLabel(driver.value)}
                       </span>
                     </div>
                   )}
