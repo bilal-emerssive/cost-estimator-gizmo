@@ -17,6 +17,20 @@ interface CostDriversProps {
   onModeChange: (id: string, isManual: boolean) => void;
 }
 
+const ratingLabels = [
+  "Very Low",
+  "Low",
+  "Nominal",
+  "High",
+  "Very High",
+  "Extra High"
+];
+
+const getRatingLabel = (value: number): string => {
+  const index = Math.round((value - 0.1) / (5 - 0.1) * (ratingLabels.length - 1));
+  return ratingLabels[Math.min(Math.max(0, index), ratingLabels.length - 1)];
+};
+
 export function CostDrivers({ drivers, onValueChange, onModeChange }: CostDriversProps) {
   const categories = [
     "Product Attributes",
@@ -90,8 +104,15 @@ export function CostDrivers({ drivers, onValueChange, onModeChange }: CostDriver
                         onValueChange={([value]) => onValueChange(driver.id, value)}
                         className="w-full"
                       />
-                      <span className="text-sm text-muted-foreground">
-                        Value: {driver.value.toFixed(1)}
+                      <div className="flex justify-between text-xs text-muted-foreground mt-2">
+                        {ratingLabels.map((label, index) => (
+                          <span key={label} style={{ width: '16.66%', textAlign: 'center' }}>
+                            {label}
+                          </span>
+                        ))}
+                      </div>
+                      <span className="text-sm text-muted-foreground block text-center mt-2">
+                        Current Rating: {getRatingLabel(driver.value)} ({driver.value.toFixed(1)})
                       </span>
                     </div>
                   )}
