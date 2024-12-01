@@ -64,43 +64,57 @@ export function ResultsView({ fpa, cocomo }: ResultsViewProps) {
         </CardContent>
       </Card>
 
-      <Card className="glass-card">
-        <CardHeader>
-          <CardTitle>COCOMO Estimates</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Metric</TableHead>
-                <TableHead className="text-right">Value</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow>
-                <TableCell>Estimated KLOC</TableCell>
-                <TableCell className="text-right">{cocomo.kloc}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Effort (Person-Months)</TableCell>
-                <TableCell className="text-right">{cocomo.effort}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Total Effort Multiplier</TableCell>
-                <TableCell className="text-right">{cocomo.multiplier}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Estimated Cost</TableCell>
-                <TableCell className="text-right">${cocomo.cost.toLocaleString()}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Development Time</TableCell>
-                <TableCell className="text-right">{cocomo.time} months</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <Card className="glass-card">
+          <CardHeader>
+            <CardTitle className="text-lg">Project Size</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold">{cocomo.kloc}</div>
+            <p className="text-sm text-muted-foreground">Estimated KLOC</p>
+          </CardContent>
+        </Card>
+
+        <Card className="glass-card">
+          <CardHeader>
+            <CardTitle className="text-lg">Development Effort</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold">{cocomo.effort}</div>
+            <p className="text-sm text-muted-foreground">Person-Months</p>
+          </CardContent>
+        </Card>
+
+        <Card className="glass-card">
+          <CardHeader>
+            <CardTitle className="text-lg">Effort Multiplier</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold">{cocomo.multiplier}</div>
+            <p className="text-sm text-muted-foreground">Total Multiplier</p>
+          </CardContent>
+        </Card>
+
+        <Card className="glass-card">
+          <CardHeader>
+            <CardTitle className="text-lg">Project Cost</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold">${cocomo.cost.toLocaleString()}</div>
+            <p className="text-sm text-muted-foreground">Estimated Cost</p>
+          </CardContent>
+        </Card>
+
+        <Card className="glass-card">
+          <CardHeader>
+            <CardTitle className="text-lg">Development Time</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold">{cocomo.time}</div>
+            <p className="text-sm text-muted-foreground">Months</p>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
