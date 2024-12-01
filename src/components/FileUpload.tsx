@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
+import { FileText, Upload } from "lucide-react";
 
 export function FileUpload() {
   const [file, setFile] = useState<File | null>(null);
@@ -32,38 +33,33 @@ export function FileUpload() {
   return (
     <Card
       {...getRootProps()}
-      className={`glass-card p-8 text-center cursor-pointer transition-all duration-300 
-        ${isDragActive ? 'border-primary' : 'border-border'}`}
+      className={`glass-card p-12 text-center cursor-pointer transition-all duration-300 hover:border-primary/50 
+        ${isDragActive ? 'border-primary scale-[1.02] bg-primary/5' : 'border-border'}`}
     >
       <input {...getInputProps()} />
-      <div className="flex flex-col items-center gap-4">
-        <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
-          <svg
-            className="w-8 h-8 text-primary"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-            />
-          </svg>
+      <div className="flex flex-col items-center gap-6">
+        <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center animate-pulse">
+          {file ? (
+            <FileText className="w-10 h-10 text-primary" />
+          ) : (
+            <Upload className="w-10 h-10 text-primary" />
+          )}
         </div>
-        <div>
-          <p className="text-lg font-medium">
-            {isDragActive ? "Drop the file here" : "Drag & drop your file here"}
+        <div className="space-y-2">
+          <p className="text-2xl font-semibold text-primary">
+            {isDragActive ? "Drop your file here" : "Upload Project Documentation"}
           </p>
-          <p className="text-sm text-muted-foreground mt-1">
-            or click to select a file
+          <p className="text-sm text-muted-foreground max-w-md mx-auto">
+            Drag & drop your project documentation file here, or click to select. We support PDF, DOC, and TXT files.
           </p>
         </div>
         {file && (
-          <p className="text-sm text-primary mt-4">
-            Selected: {file.name}
-          </p>
+          <div className="mt-4 p-4 bg-primary/10 rounded-lg">
+            <p className="text-sm font-medium text-primary flex items-center gap-2">
+              <FileText className="w-4 h-4" />
+              {file.name}
+            </p>
+          </div>
         )}
       </div>
     </Card>
