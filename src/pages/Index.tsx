@@ -7,6 +7,7 @@ import { ProjectCard } from "@/components/ProjectCard";
 import { api } from "@/services/api";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { mockResults } from "@/data/mockData";
 
 const mockDrivers = [
   // Product Attributes
@@ -84,23 +85,6 @@ export default function Index() {
   const handleRecalculate = () => {
     setStep(2);
     setShowResults(false);
-  };
-
-  const mockResults = {
-    fpa: {
-      ei: { count: 3, modules: ["Login form", "Customer entry", "File upload"] },
-      eo: { count: 2, modules: ["Order confirmation", "Sales report"] },
-      eq: { count: 1, modules: ["Product search"] },
-      ilf: { count: 2, modules: ["Employee records", "Product catalog"] },
-      eif: { count: 1, modules: ["Currency exchange API"] },
-      total: 20,
-    },
-    cocomo: {
-      kloc: 100,
-      effort: 360,
-      multiplier: 1.2,
-      time: 18,
-    },
   };
 
   return (
