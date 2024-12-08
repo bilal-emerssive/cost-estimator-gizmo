@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 interface ProjectCardProps {
-  id: number;
+  id: string;  // Changed from number to string since project names are strings
   name: string;
   date: string;
   onViewResults: () => void;
