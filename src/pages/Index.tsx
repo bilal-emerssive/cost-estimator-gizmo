@@ -11,25 +11,25 @@ import { mockResults } from "@/data/mockData";
 
 const mockDrivers = [
   // Product Attributes
-  { id: "rely", name: "Required Reliability", category: "Product Attributes", value: 1.0, isManual: false },
-  { id: "data", name: "Database Size", category: "Product Attributes", value: 1.0, isManual: false },
-  { id: "cplx", name: "Product Complexity", category: "Product Attributes", value: 1.0, isManual: false },
+  { id: "rely", name: "Required Reliability", category: "Product Attributes", value: 1.0, isManual: false, isIncluded: true },
+  { id: "data", name: "Database Size", category: "Product Attributes", value: 1.0, isManual: false, isIncluded: true },
+  { id: "cplx", name: "Product Complexity", category: "Product Attributes", value: 1.0, isManual: false, isIncluded: true },
   
   // Platform Attributes
-  { id: "time", name: "Time Constraint", category: "Platform Attributes", value: 1.0, isManual: false },
-  { id: "stor", name: "Storage Constraint", category: "Platform Attributes", value: 1.0, isManual: false },
-  { id: "pvol", name: "Platform Volatility", category: "Platform Attributes", value: 1.0, isManual: false },
+  { id: "time", name: "Time Constraint", category: "Platform Attributes", value: 1.0, isManual: false, isIncluded: true },
+  { id: "stor", name: "Storage Constraint", category: "Platform Attributes", value: 1.0, isManual: false, isIncluded: true },
+  { id: "pvol", name: "Platform Volatility", category: "Platform Attributes", value: 1.0, isManual: false, isIncluded: true },
   
   // Personnel Attributes
-  { id: "acap", name: "Analyst Capability", category: "Personnel Attributes", value: 1.0, isManual: false },
-  { id: "pcap", name: "Programmer Capability", category: "Personnel Attributes", value: 1.0, isManual: false },
-  { id: "aexp", name: "Application Experience", category: "Personnel Attributes", value: 1.0, isManual: false },
-  { id: "pexp", name: "Platform Experience", category: "Personnel Attributes", value: 1.0, isManual: false },
-  { id: "ltex", name: "Language and Tool Experience", category: "Personnel Attributes", value: 1.0, isManual: false },
+  { id: "acap", name: "Analyst Capability", category: "Personnel Attributes", value: 1.0, isManual: false, isIncluded: true },
+  { id: "pcap", name: "Programmer Capability", category: "Personnel Attributes", value: 1.0, isManual: false, isIncluded: true },
+  { id: "aexp", name: "Application Experience", category: "Personnel Attributes", value: 1.0, isManual: false, isIncluded: true },
+  { id: "pexp", name: "Platform Experience", category: "Personnel Attributes", value: 1.0, isManual: false, isIncluded: true },
+  { id: "ltex", name: "Language and Tool Experience", category: "Personnel Attributes", value: 1.0, isManual: false, isIncluded: true },
   
   // Project Attributes
-  { id: "tool", name: "Use of Software Tools", category: "Project Attributes", value: 1.0, isManual: false },
-  { id: "sced", name: "Development Schedule", category: "Project Attributes", value: 1.0, isManual: false },
+  { id: "tool", name: "Use of Software Tools", category: "Project Attributes", value: 1.0, isManual: false, isIncluded: true },
+  { id: "sced", name: "Development Schedule", category: "Project Attributes", value: 1.0, isManual: false, isIncluded: true },
 ];
 
 export default function Index() {
