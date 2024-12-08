@@ -70,11 +70,21 @@ export default function Index() {
     );
   };
 
+  const handleIncludeChange = (id: string, isIncluded: boolean) => {
+    setDrivers(prevDrivers => 
+      prevDrivers.map(driver => 
+        driver.id === id ? { ...driver, isIncluded } : driver
+      )
+    );
+  };
+
   const handleProcess = async () => {
-    const costDrivers = drivers.map(driver => ({
-      driver: driver.id,
-      value: driver.isManual ? driver.value : null,
-    }));
+    const costDrivers = drivers
+      .filter(driver => driver.isIncluded)
+      .map(driver => ({
+        driver: driver.id,
+        value: driver.isManual ? driver.value : null,
+      }));
 
     generateEstimation.mutate({
       requirementsDocument: new File([""], "requirements.txt"),
@@ -105,7 +115,7 @@ export default function Index() {
                   key={project.projectName}
                   id={project.projectName}
                   name={project.projectName}
-                  date={project.dateCreated}
+                  date={new Date(project.dateCreated).toISOString()}
                   onViewResults={() => setShowResults(true)}
                   onRecalculate={handleRecalculate}
                 />
@@ -130,6 +140,7 @@ export default function Index() {
               drivers={drivers} 
               onValueChange={handleDriverChange}
               onModeChange={handleModeChange}
+              onIncludeChange={handleIncludeChange}
             />
             <div className="flex justify-center">
               <Button

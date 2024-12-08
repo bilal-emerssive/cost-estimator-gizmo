@@ -46,6 +46,7 @@ export function ResultsView({ fpa, cocomo }: ResultsViewProps) {
           <Accordion type="single" collapsible className="w-full space-y-2">
             {Object.entries(fpa).map(([key, value]) => {
               if (key === 'total') return null;
+              const metric = value as FPAMetric;
               const title = {
                 ei: 'External Inputs (EI)',
                 eo: 'External Outputs (EO)',
@@ -64,13 +65,13 @@ export function ResultsView({ fpa, cocomo }: ResultsViewProps) {
                     <div className="flex-1 flex items-center justify-between pr-4">
                       <span>{title}</span>
                       <Badge variant="outline" className="ml-2">
-                        {value.count} points
+                        {metric.count} points
                       </Badge>
                     </div>
                   </AccordionTrigger>
                   <AccordionContent className="pb-4 px-4">
                     <ul className="space-y-2">
-                      {value.modules.map((module, index) => (
+                      {metric.modules.map((module, index) => (
                         <li key={index} className="flex items-center gap-2 text-muted-foreground">
                           <ChevronRight className="h-4 w-4" />
                           {module}
