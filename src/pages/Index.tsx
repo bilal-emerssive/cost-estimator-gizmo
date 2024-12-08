@@ -4,11 +4,9 @@ import { FileUpload } from "@/components/FileUpload";
 import { CostDrivers } from "@/components/CostDrivers";
 import { ResultsView } from "@/components/ResultsView";
 import { ProjectCard } from "@/components/ProjectCard";
-
-const mockProjects = [
-  { id: 1, name: "E-Commerce Platform", date: "2024-02-20" },
-  { id: 2, name: "CRM System", date: "2024-02-15" },
-];
+import { api } from "@/services/api";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 const mockDrivers = [
   // Product Attributes
@@ -33,28 +31,27 @@ const mockDrivers = [
   { id: "sced", name: "Development Schedule", category: "Project Attributes", value: 1.0, isManual: false },
 ];
 
-const mockResults = {
-  fpa: {
-    ei: 5,
-    eo: 3,
-    eq: 4,
-    ilf: 2,
-    eif: 6,
-    total: 20,
-  },
-  cocomo: {
-    kloc: 100,
-    effort: 360,
-    multiplier: 1.2,
-    cost: 540000,
-    time: 18,
-  },
-};
-
 export default function Index() {
   const [step, setStep] = useState(1);
   const [showResults, setShowResults] = useState(false);
   const [drivers, setDrivers] = useState(mockDrivers);
+
+  const { data: projects, isLoading: isLoadingProjects } = useQuery({
+    queryKey: ['projects'],
+    queryFn: api.fetchProjects,
+  });
+
+  const generateEstimation = useMutation({
+    mutationFn: api.generateEstimation,
+    onSuccess: () => {
+      setShowResults(true);
+      toast.success("Estimation generated successfully");
+    },
+    onError: (error) => {
+      toast.error("Failed to generate estimation");
+      console.error(error);
+    },
+  });
 
   const handleDriverChange = (id: string, value: number) => {
     setDrivers(prevDrivers => 
@@ -64,7 +61,7 @@ export default function Index() {
     );
   };
 
-   const handleModeChange = (id: string, isManual: boolean) => {
+  const handleModeChange = (id: string, isManual: boolean) => {
     setDrivers(prevDrivers => 
       prevDrivers.map(driver => 
         driver.id === id ? { ...driver, isManual } : driver
@@ -72,13 +69,38 @@ export default function Index() {
     );
   };
 
-  const handleProcess = () => {
-    setShowResults(true);
+  const handleProcess = async () => {
+    const costDrivers = drivers.map(driver => ({
+      driver: driver.id,
+      value: driver.isManual ? driver.value : null,
+    }));
+
+    generateEstimation.mutate({
+      requirementsDocument: new File([""], "requirements.txt"),
+      costDrivers,
+    });
   };
 
   const handleRecalculate = () => {
     setStep(2);
     setShowResults(false);
+  };
+
+  const mockResults = {
+    fpa: {
+      ei: { count: 3, modules: ["Login form", "Customer entry", "File upload"] },
+      eo: { count: 2, modules: ["Order confirmation", "Sales report"] },
+      eq: { count: 1, modules: ["Product search"] },
+      ilf: { count: 2, modules: ["Employee records", "Product catalog"] },
+      eif: { count: 1, modules: ["Currency exchange API"] },
+      total: 20,
+    },
+    cocomo: {
+      kloc: 100,
+      effort: 360,
+      multiplier: 1.2,
+      time: 18,
+    },
   };
 
   return (
@@ -94,10 +116,12 @@ export default function Index() {
         {step === 1 && (
           <div className="space-y-6 animate-fadeIn">
             <div className="grid gap-6 md:grid-cols-2">
-              {mockProjects.map((project) => (
+              {projects?.map((project) => (
                 <ProjectCard
-                  key={project.id}
-                  {...project}
+                  key={project.projectName}
+                  id={project.projectName}
+                  name={project.projectName}
+                  date={project.dateCreated}
                   onViewResults={() => setShowResults(true)}
                   onRecalculate={handleRecalculate}
                 />
@@ -119,17 +143,18 @@ export default function Index() {
           <div className="space-y-8 animate-fadeIn">
             <FileUpload />
             <CostDrivers 
-      drivers={drivers} 
-      onValueChange={handleDriverChange}
-      onModeChange={handleModeChange}
-    />
+              drivers={drivers} 
+              onValueChange={handleDriverChange}
+              onModeChange={handleModeChange}
+            />
             <div className="flex justify-center">
               <Button
                 size="lg"
                 onClick={handleProcess}
                 className="hover-lift"
+                disabled={generateEstimation.isPending}
               >
-                Process Estimation
+                {generateEstimation.isPending ? "Processing..." : "Process Estimation"}
               </Button>
             </div>
           </div>

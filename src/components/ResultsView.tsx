@@ -1,20 +1,30 @@
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
+interface FPAMetric {
+  count: number;
+  modules: string[];
+}
+
 interface ResultsViewProps {
   fpa: {
-    ei: number;
-    eo: number;
-    eq: number;
-    ilf: number;
-    eif: number;
+    ei: FPAMetric;
+    eo: FPAMetric;
+    eq: FPAMetric;
+    ilf: FPAMetric;
+    eif: FPAMetric;
     total: number;
   };
   cocomo: {
     kloc: number;
     effort: number;
     multiplier: number;
-    cost: number;
     time: number;
   };
 }
@@ -27,40 +37,78 @@ export function ResultsView({ fpa, cocomo }: ResultsViewProps) {
           <CardTitle>Function Point Analysis</CardTitle>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Metric</TableHead>
-                <TableHead className="text-right">Value</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow>
-                <TableCell>External Inputs (EI)</TableCell>
-                <TableCell className="text-right">{fpa.ei}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>External Outputs (EO)</TableCell>
-                <TableCell className="text-right">{fpa.eo}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>External Inquiries (EQ)</TableCell>
-                <TableCell className="text-right">{fpa.eq}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Internal Logical Files (ILF)</TableCell>
-                <TableCell className="text-right">{fpa.ilf}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>External Interface Files (EIF)</TableCell>
-                <TableCell className="text-right">{fpa.eif}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">Total Function Points</TableCell>
-                <TableCell className="text-right font-medium">{fpa.total}</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="ei">
+              <AccordionTrigger>
+                External Inputs (EI) - {fpa.ei.count} points
+              </AccordionTrigger>
+              <AccordionContent>
+                <ul className="list-disc pl-6 space-y-2">
+                  {fpa.ei.modules.map((module, index) => (
+                    <li key={index}>{module}</li>
+                  ))}
+                </ul>
+              </AccordionContent>
+            </AccordionItem>
+            
+            <AccordionItem value="eo">
+              <AccordionTrigger>
+                External Outputs (EO) - {fpa.eo.count} points
+              </AccordionTrigger>
+              <AccordionContent>
+                <ul className="list-disc pl-6 space-y-2">
+                  {fpa.eo.modules.map((module, index) => (
+                    <li key={index}>{module}</li>
+                  ))}
+                </ul>
+              </AccordionContent>
+            </AccordionItem>
+            
+            <AccordionItem value="eq">
+              <AccordionTrigger>
+                External Inquiries (EQ) - {fpa.eq.count} points
+              </AccordionTrigger>
+              <AccordionContent>
+                <ul className="list-disc pl-6 space-y-2">
+                  {fpa.eq.modules.map((module, index) => (
+                    <li key={index}>{module}</li>
+                  ))}
+                </ul>
+              </AccordionContent>
+            </AccordionItem>
+            
+            <AccordionItem value="ilf">
+              <AccordionTrigger>
+                Internal Logical Files (ILF) - {fpa.ilf.count} points
+              </AccordionTrigger>
+              <AccordionContent>
+                <ul className="list-disc pl-6 space-y-2">
+                  {fpa.ilf.modules.map((module, index) => (
+                    <li key={index}>{module}</li>
+                  ))}
+                </ul>
+              </AccordionContent>
+            </AccordionItem>
+            
+            <AccordionItem value="eif">
+              <AccordionTrigger>
+                External Interface Files (EIF) - {fpa.eif.count} points
+              </AccordionTrigger>
+              <AccordionContent>
+                <ul className="list-disc pl-6 space-y-2">
+                  {fpa.eif.modules.map((module, index) => (
+                    <li key={index}>{module}</li>
+                  ))}
+                </ul>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+          
+          <div className="mt-4 p-4 bg-primary/10 rounded-lg">
+            <p className="text-lg font-semibold text-center">
+              Total Function Points: {fpa.total}
+            </p>
+          </div>
         </CardContent>
       </Card>
 
@@ -92,16 +140,6 @@ export function ResultsView({ fpa, cocomo }: ResultsViewProps) {
           <CardContent>
             <div className="text-3xl font-bold">{cocomo.multiplier}</div>
             <p className="text-sm text-muted-foreground">Total Multiplier</p>
-          </CardContent>
-        </Card>
-
-        <Card className="glass-card">
-          <CardHeader>
-            <CardTitle className="text-lg">Project Cost</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">${cocomo.cost.toLocaleString()}</div>
-            <p className="text-sm text-muted-foreground">Estimated Cost</p>
           </CardContent>
         </Card>
 
