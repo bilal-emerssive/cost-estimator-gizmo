@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { mockProjects } from "@/data/mockData";
 
 export const ProjectSchema = z.object({
   projectName: z.string(),
@@ -36,10 +35,22 @@ export const ProjectSchema = z.object({
 
 export type Project = z.infer<typeof ProjectSchema>;
 
+// Replace these with your actual API endpoints
+const API_BASE_URL = "https://your-api-endpoint.com";
+
 export const api = {
   fetchProjects: async (): Promise<Project[]> => {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    return mockProjects;
+    try {
+      const response = await fetch(`${API_BASE_URL}/projects`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch projects');
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching projects:', error);
+      throw error;
+    }
   },
 
   generateEstimation: async (data: {
@@ -49,7 +60,25 @@ export const api = {
       value: number | null;
     }>;
   }): Promise<Project> => {
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    return mockProjects[0];
+    try {
+      const formData = new FormData();
+      formData.append('requirementsDocument', data.requirementsDocument);
+      formData.append('costDrivers', JSON.stringify(data.costDrivers));
+
+      const response = await fetch(`${API_BASE_URL}/estimations`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to generate estimation');
+      }
+
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error('Error generating estimation:', error);
+      throw error;
+    }
   }
 };
