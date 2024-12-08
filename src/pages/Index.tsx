@@ -98,7 +98,7 @@ export default function Index() {
         driver: driver.id,
         value: driver.isManual 
           ? driver.value 
-          : "Nominal", // Default to "Nominal" for system-generated drivers
+          : "Null", // Default to "Nominal" for system-generated drivers
       }));
   
     generateEstimation.mutate({
