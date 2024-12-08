@@ -29,7 +29,7 @@ export const ProjectSchema = z.object({
     projectSize: z.number(),
     developmentEffort: z.number(),
     effortMultiplier: z.number(),
-    developmentTime: z.string()
+    developmentTime: z.number()
   })
 });
 
@@ -65,7 +65,7 @@ const mockProjects: Project[] = [
       projectSize: 120,
       developmentEffort: 150,
       effortMultiplier: 1.2,
-      developmentTime: "5 months"
+      developmentTime: 18
     }
   }
 ];
