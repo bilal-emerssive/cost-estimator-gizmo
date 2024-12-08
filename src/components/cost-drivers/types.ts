@@ -2,7 +2,7 @@ export interface CostDriver {
   id: string;
   name: string;
   category: string;
-  value: number;
+  value: string; // Changed from number to string
   isManual: boolean;
   isIncluded: boolean;
 }

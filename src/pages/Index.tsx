@@ -5,37 +5,49 @@ import { CostDrivers } from "@/components/CostDrivers";
 import { ResultsView } from "@/components/ResultsView";
 import { ProjectCard } from "@/components/ProjectCard";
 import { api } from "@/services/api";
+import { Project } from "@/services/api"; // Import Project type
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { mockResults } from "@/data/mockData";
 
-const mockDrivers = [
+// Rating labels added here
+const ratingLabels = [
+  "Very Low",
+  "Low",
+  "Nominal", 
+  "High",
+  "Very High",
+  "Extra High"
+];
+
+// Initial drivers configuration
+const INITIAL_DRIVERS = [
   // Product Attributes
-  { id: "rely", name: "Required Reliability", category: "Product Attributes", value: 1.0, isManual: false, isIncluded: true },
-  { id: "data", name: "Database Size", category: "Product Attributes", value: 1.0, isManual: false, isIncluded: true },
-  { id: "cplx", name: "Product Complexity", category: "Product Attributes", value: 1.0, isManual: false, isIncluded: true },
+  { id: "rely", name: "Required Reliability", category: "Product Attributes", value: "Nominal", isManual: false, isIncluded: true },
+  { id: "data", name: "Database Size", category: "Product Attributes", value: "Nominal", isManual: false, isIncluded: true },
+  { id: "cplx", name: "Product Complexity", category: "Product Attributes", value: "Nominal", isManual: false, isIncluded: true },
   
   // Platform Attributes
-  { id: "time", name: "Time Constraint", category: "Platform Attributes", value: 1.0, isManual: false, isIncluded: true },
-  { id: "stor", name: "Storage Constraint", category: "Platform Attributes", value: 1.0, isManual: false, isIncluded: true },
-  { id: "pvol", name: "Platform Volatility", category: "Platform Attributes", value: 1.0, isManual: false, isIncluded: true },
+  { id: "time", name: "Time Constraint", category: "Platform Attributes", value: "Nominal", isManual: false, isIncluded: true },
+  { id: "stor", name: "Storage Constraint", category: "Platform Attributes", value: "Nominal", isManual: false, isIncluded: true },
+  { id: "pvol", name: "Platform Volatility", category: "Platform Attributes", value: "Nominal", isManual: false, isIncluded: true },
   
   // Personnel Attributes
-  { id: "acap", name: "Analyst Capability", category: "Personnel Attributes", value: 1.0, isManual: false, isIncluded: true },
-  { id: "pcap", name: "Programmer Capability", category: "Personnel Attributes", value: 1.0, isManual: false, isIncluded: true },
-  { id: "aexp", name: "Application Experience", category: "Personnel Attributes", value: 1.0, isManual: false, isIncluded: true },
-  { id: "pexp", name: "Platform Experience", category: "Personnel Attributes", value: 1.0, isManual: false, isIncluded: true },
-  { id: "ltex", name: "Language and Tool Experience", category: "Personnel Attributes", value: 1.0, isManual: false, isIncluded: true },
+  { id: "acap", name: "Analyst Capability", category: "Personnel Attributes", value: "Nominal", isManual: false, isIncluded: true },
+  { id: "pcap", name: "Programmer Capability", category: "Personnel Attributes", value: "Nominal", isManual: false, isIncluded: true },
+  { id: "aexp", name: "Application Experience", category: "Personnel Attributes", value: "Nominal", isManual: false, isIncluded: true },
+  { id: "pexp", name: "Platform Experience", category: "Personnel Attributes", value: "Nominal", isManual: false, isIncluded: true },
+  { id: "ltex", name: "Language and Tool Experience", category: "Personnel Attributes", value: "Nominal", isManual: false, isIncluded: true },
   
   // Project Attributes
-  { id: "tool", name: "Use of Software Tools", category: "Project Attributes", value: 1.0, isManual: false, isIncluded: true },
-  { id: "sced", name: "Development Schedule", category: "Project Attributes", value: 1.0, isManual: false, isIncluded: true },
+  { id: "tool", name: "Use of Software Tools", category: "Project Attributes", value: "Nominal", isManual: false, isIncluded: true },
+  { id: "sced", name: "Development Schedule", category: "Project Attributes", value: "Nominal", isManual: false, isIncluded: true },
 ];
 
 export default function Index() {
   const [step, setStep] = useState(1);
   const [showResults, setShowResults] = useState(false);
-  const [drivers, setDrivers] = useState(mockDrivers);
+  const [drivers, setDrivers] = useState(INITIAL_DRIVERS);
+  const [currentProject, setCurrentProject] = useState<Project | null>(null);
 
   const { data: projects, isLoading: isLoadingProjects } = useQuery({
     queryKey: ['projects'],
@@ -44,7 +56,8 @@ export default function Index() {
 
   const generateEstimation = useMutation({
     mutationFn: api.generateEstimation,
-    onSuccess: () => {
+    onSuccess: (data: Project) => {
+      setCurrentProject(data);
       setShowResults(true);
       toast.success("Estimation generated successfully");
     },
@@ -54,7 +67,7 @@ export default function Index() {
     },
   });
 
-  const handleDriverChange = (id: string, value: number) => {
+  const handleDriverChange = (id: string, value: string) => {
     setDrivers(prevDrivers => 
       prevDrivers.map(driver => 
         driver.id === id ? { ...driver, value } : driver
@@ -83,9 +96,11 @@ export default function Index() {
       .filter(driver => driver.isIncluded)
       .map(driver => ({
         driver: driver.id,
-        value: driver.isManual ? driver.value : null,
+        value: driver.isManual 
+          ? driver.value 
+          : "Nominal", // Default to "Nominal" for system-generated drivers
       }));
-
+  
     generateEstimation.mutate({
       requirementsDocument: new File([""], "requirements.txt"),
       costDrivers,
@@ -118,7 +133,10 @@ export default function Index() {
                   id={project.projectName}
                   name={project.projectName}
                   date={new Date(project.dateCreated).toISOString()}
-                  onViewResults={() => setShowResults(true)}
+                  onViewResults={() => {
+                    setCurrentProject(project);
+                    setShowResults(true);
+                  }}
                   onRecalculate={handleRecalculate}
                 />
               ))}
@@ -157,9 +175,43 @@ export default function Index() {
           </div>
         )}
 
-        {showResults && (
+        {showResults && currentProject && (
           <div className="space-y-10 animate-fadeIn">
-            <ResultsView {...mockResults} />
+            <ResultsView 
+              fpa={{
+                ei: { 
+                  count: currentProject.functionPointAnalysis.externalInputs.count, 
+                  modules: currentProject.functionPointAnalysis.externalInputs.modules 
+                },
+                eo: { 
+                  count: currentProject.functionPointAnalysis.externalOutputs.count, 
+                  modules: currentProject.functionPointAnalysis.externalOutputs.modules 
+                },
+                eq: { 
+                  count: currentProject.functionPointAnalysis.externalInquiries.count, 
+                  modules: currentProject.functionPointAnalysis.externalInquiries.modules 
+                },
+                ilf: { 
+                  count: currentProject.functionPointAnalysis.internalLogicalFiles.count, 
+                  modules: currentProject.functionPointAnalysis.internalLogicalFiles.modules 
+                },
+                eif: { 
+                  count: currentProject.functionPointAnalysis.externalInterfaceFiles.count, 
+                  modules: currentProject.functionPointAnalysis.externalInterfaceFiles.modules 
+                },
+                total: currentProject.functionPointAnalysis.externalInputs.count +
+                        currentProject.functionPointAnalysis.externalOutputs.count +
+                        currentProject.functionPointAnalysis.externalInquiries.count +
+                        currentProject.functionPointAnalysis.internalLogicalFiles.count +
+                        currentProject.functionPointAnalysis.externalInterfaceFiles.count
+              }}
+              cocomo={{
+                kloc: currentProject.estimationResults.projectSize,
+                effort: currentProject.estimationResults.developmentEffort,
+                multiplier: currentProject.estimationResults.effortMultiplier,
+                time: currentProject.estimationResults.developmentTime
+              }}
+            />
             <div className="flex justify-center gap-6">
               <Button
                 variant="outline"

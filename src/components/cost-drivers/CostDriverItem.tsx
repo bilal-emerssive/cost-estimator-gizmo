@@ -8,25 +8,30 @@ import { Badge } from "@/components/ui/badge";
 interface CostDriverItemProps {
   id: string;
   name: string;
-  value: number;
+  value: string;
   isManual: boolean;
   isIncluded: boolean;
-  onValueChange: (id: string, value: number) => void;
+  onValueChange: (id: string, value: string) => void;
   onModeChange: (id: string, isManual: boolean) => void;
   onIncludeChange: (id: string, isIncluded: boolean) => void;
 }
 
 const ratingLabels = [
   "Very Low",
-  "Low",
+  "Low", 
   "Nominal",
   "High",
   "Very High",
   "Extra High"
 ];
 
-const getRatingLabel = (value: number): string => {
-  const index = Math.round((value - 0.1) / (5 - 0.1) * (ratingLabels.length - 1));
+const getRatingValue = (label: string): number => {
+  const index = ratingLabels.indexOf(label);
+  return index === -1 ? 1 : (index + 1) * 1;
+};
+
+const getRatingLabel = (numericValue: number): string => {
+  const index = Math.round((numericValue - 0.1) / (5 - 0.1) * (ratingLabels.length - 1));
   return ratingLabels[Math.min(Math.max(0, index), ratingLabels.length - 1)];
 };
 
@@ -55,7 +60,7 @@ export function CostDriverItem({
               {name}
             </Label>
             <Badge variant="outline" className="ml-2">
-              {getRatingLabel(value)}
+              {value}
             </Badge>
           </div>
         </div>
@@ -86,15 +91,20 @@ export function CostDriverItem({
 
           {isManual && (
             <div className="space-y-2 bg-muted/30 p-4 rounded-lg">
-              <Slider
-                id={id}
-                min={0.1}
-                max={5}
-                step={0.1}
-                value={[value]}
-                onValueChange={([newValue]) => onValueChange(id, newValue)}
-                className="w-full"
-              />
+              <div className="flex items-center space-x-4">
+                <Slider
+                  id={id}
+                  min={0}
+                  max={5}
+                  step={1}
+                  value={[ratingLabels.indexOf(value)]}
+                  onValueChange={([newIndex]) => {
+                    const newLabel = ratingLabels[newIndex];
+                    onValueChange(id, newLabel);
+                  }}
+                  className="w-full"
+                />
+              </div>
               <div className="flex justify-between text-xs text-muted-foreground mt-4">
                 {ratingLabels.map((label) => (
                   <span key={label} className="text-center px-2">
