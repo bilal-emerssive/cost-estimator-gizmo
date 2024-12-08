@@ -4,6 +4,7 @@ export interface CostDriver {
   category: string;
   value: number;
   isManual: boolean;
+  isIncluded?: boolean;
 }
 
 export const categories = [

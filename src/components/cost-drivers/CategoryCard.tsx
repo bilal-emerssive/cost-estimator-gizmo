@@ -14,6 +14,7 @@ interface CategoryCardProps {
   drivers: CostDriver[];
   onValueChange: (id: string, value: number) => void;
   onModeChange: (id: string, isManual: boolean) => void;
+  onIncludeChange: (id: string, isIncluded: boolean) => void;
 }
 
 export function CategoryCard({
@@ -21,6 +22,7 @@ export function CategoryCard({
   drivers,
   onValueChange,
   onModeChange,
+  onIncludeChange,
 }: CategoryCardProps) {
   return (
     <Card className="glass-card animate-fadeIn hover:shadow-lg transition-shadow duration-300">
@@ -33,19 +35,20 @@ export function CategoryCard({
                 <Info className="w-4 h-4 text-muted-foreground" />
               </TooltipTrigger>
               <TooltipContent>
-                <p>Adjust these values to fine-tune your estimation</p>
+                <p>Select which drivers to include in your estimation</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-8 p-6">
+      <CardContent className="space-y-4 p-6">
         {drivers.map((driver) => (
           <CostDriverItem
             key={driver.id}
             {...driver}
             onValueChange={onValueChange}
             onModeChange={onModeChange}
+            onIncludeChange={onIncludeChange}
           />
         ))}
       </CardContent>

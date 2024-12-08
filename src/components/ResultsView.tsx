@@ -5,7 +5,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { ArrowUpRight, ChevronRight } from "lucide-react";
 
 interface FPAMetric {
   count: number;
@@ -32,123 +33,107 @@ interface ResultsViewProps {
 export function ResultsView({ fpa, cocomo }: ResultsViewProps) {
   return (
     <div className="space-y-6 animate-fadeIn">
-      <Card className="glass-card">
-        <CardHeader>
-          <CardTitle>Function Point Analysis</CardTitle>
+      <Card className="glass-card hover:shadow-lg transition-all duration-300">
+        <CardHeader className="border-b bg-primary/5">
+          <CardTitle className="flex items-center justify-between">
+            <span>Function Point Analysis</span>
+            <Badge variant="secondary" className="text-lg px-4">
+              Total: {fpa.total}
+            </Badge>
+          </CardTitle>
         </CardHeader>
-        <CardContent>
-          <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="ei">
-              <AccordionTrigger>
-                External Inputs (EI) - {fpa.ei.count} points
-              </AccordionTrigger>
-              <AccordionContent>
-                <ul className="list-disc pl-6 space-y-2">
-                  {fpa.ei.modules.map((module, index) => (
-                    <li key={index}>{module}</li>
-                  ))}
-                </ul>
-              </AccordionContent>
-            </AccordionItem>
-            
-            <AccordionItem value="eo">
-              <AccordionTrigger>
-                External Outputs (EO) - {fpa.eo.count} points
-              </AccordionTrigger>
-              <AccordionContent>
-                <ul className="list-disc pl-6 space-y-2">
-                  {fpa.eo.modules.map((module, index) => (
-                    <li key={index}>{module}</li>
-                  ))}
-                </ul>
-              </AccordionContent>
-            </AccordionItem>
-            
-            <AccordionItem value="eq">
-              <AccordionTrigger>
-                External Inquiries (EQ) - {fpa.eq.count} points
-              </AccordionTrigger>
-              <AccordionContent>
-                <ul className="list-disc pl-6 space-y-2">
-                  {fpa.eq.modules.map((module, index) => (
-                    <li key={index}>{module}</li>
-                  ))}
-                </ul>
-              </AccordionContent>
-            </AccordionItem>
-            
-            <AccordionItem value="ilf">
-              <AccordionTrigger>
-                Internal Logical Files (ILF) - {fpa.ilf.count} points
-              </AccordionTrigger>
-              <AccordionContent>
-                <ul className="list-disc pl-6 space-y-2">
-                  {fpa.ilf.modules.map((module, index) => (
-                    <li key={index}>{module}</li>
-                  ))}
-                </ul>
-              </AccordionContent>
-            </AccordionItem>
-            
-            <AccordionItem value="eif">
-              <AccordionTrigger>
-                External Interface Files (EIF) - {fpa.eif.count} points
-              </AccordionTrigger>
-              <AccordionContent>
-                <ul className="list-disc pl-6 space-y-2">
-                  {fpa.eif.modules.map((module, index) => (
-                    <li key={index}>{module}</li>
-                  ))}
-                </ul>
-              </AccordionContent>
-            </AccordionItem>
+        <CardContent className="pt-6">
+          <Accordion type="single" collapsible className="w-full space-y-2">
+            {Object.entries(fpa).map(([key, value]) => {
+              if (key === 'total') return null;
+              const title = {
+                ei: 'External Inputs (EI)',
+                eo: 'External Outputs (EO)',
+                eq: 'External Inquiries (EQ)',
+                ilf: 'Internal Logical Files (ILF)',
+                eif: 'External Interface Files (EIF)',
+              }[key];
+
+              return (
+                <AccordionItem 
+                  key={key} 
+                  value={key}
+                  className="border rounded-lg px-2 hover:bg-accent/50 transition-colors"
+                >
+                  <AccordionTrigger className="py-4 flex items-center gap-2">
+                    <div className="flex-1 flex items-center justify-between pr-4">
+                      <span>{title}</span>
+                      <Badge variant="outline" className="ml-2">
+                        {value.count} points
+                      </Badge>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="pb-4 px-4">
+                    <ul className="space-y-2">
+                      {value.modules.map((module, index) => (
+                        <li key={index} className="flex items-center gap-2 text-muted-foreground">
+                          <ChevronRight className="h-4 w-4" />
+                          {module}
+                        </li>
+                      ))}
+                    </ul>
+                  </AccordionContent>
+                </AccordionItem>
+              );
+            })}
           </Accordion>
-          
-          <div className="mt-4 p-4 bg-primary/10 rounded-lg">
-            <p className="text-lg font-semibold text-center">
-              Total Function Points: {fpa.total}
-            </p>
-          </div>
         </CardContent>
       </Card>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <Card className="glass-card">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card className="glass-card hover:shadow-lg transition-all duration-300">
           <CardHeader>
-            <CardTitle className="text-lg">Project Size</CardTitle>
+            <CardTitle className="text-lg flex items-center justify-between">
+              Project Size
+              <ArrowUpRight className="h-5 w-5 text-muted-foreground" />
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">{cocomo.kloc}</div>
+            <div className="text-3xl font-bold">{cocomo.kloc.toFixed(2)}</div>
             <p className="text-sm text-muted-foreground">Estimated KLOC</p>
           </CardContent>
         </Card>
 
-        <Card className="glass-card">
+        <Card className="glass-card hover:shadow-lg transition-all duration-300">
           <CardHeader>
-            <CardTitle className="text-lg">Development Effort</CardTitle>
+            <CardTitle className="text-lg flex items-center justify-between">
+              Development Effort
+              <ArrowUpRight className="h-5 w-5 text-muted-foreground" />
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">{cocomo.effort}</div>
+            <div className="text-3xl font-bold">{cocomo.effort.toFixed(2)}</div>
             <p className="text-sm text-muted-foreground">Person-Months</p>
           </CardContent>
         </Card>
 
-        <Card className="glass-card">
+        <Card className="glass-card hover:shadow-lg transition-all duration-300">
           <CardHeader>
-            <CardTitle className="text-lg">Effort Multiplier</CardTitle>
+            <CardTitle className="text-lg flex items-center justify-between">
+              Effort Multiplier
+              <ArrowUpRight className="h-5 w-5 text-muted-foreground" />
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">{cocomo.multiplier}</div>
+            <div className="text-3xl font-bold">{cocomo.multiplier.toFixed(2)}</div>
             <p className="text-sm text-muted-foreground">Total Multiplier</p>
           </CardContent>
         </Card>
 
-        <Card className="glass-card">
+        <Card className="glass-card hover:shadow-lg transition-all duration-300">
           <CardHeader>
-            <CardTitle className="text-lg">Development Time</CardTitle>
+            <CardTitle className="text-lg flex items-center justify-between">
+              Development Time
+              <ArrowUpRight className="h-5 w-5 text-muted-foreground" />
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">{cocomo.time}</div>
+            <div className="text-3xl font-bold">{cocomo.time.toFixed(2)}</div>
             <p className="text-sm text-muted-foreground">Months</p>
           </CardContent>
         </Card>
