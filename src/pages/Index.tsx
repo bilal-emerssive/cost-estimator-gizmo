@@ -98,18 +98,20 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-cost-100 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto space-y-8">
-        <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold tracking-tight">Cost Estimation Tool</h1>
-          <p className="text-lg text-muted-foreground">
-            Calculate software development effort and costs with precision
+    <div className="min-h-screen bg-gradient-to-b from-cost-100 to-cost-200 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto space-y-10">
+        <div className="text-center space-y-4">
+          <h1 className="text-5xl font-bold tracking-tight bg-gradient-to-r from-cost-400 to-cost-500 bg-clip-text text-transparent">
+            Cost Estimation Tool
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Calculate software development effort and costs with precision using our advanced estimation algorithms
           </p>
         </div>
 
         {step === 1 && (
-          <div className="space-y-6 animate-fadeIn">
-            <div className="grid gap-6 md:grid-cols-2">
+          <div className="space-y-8 animate-fadeIn">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {projects?.map((project) => (
                 <ProjectCard
                   key={project.projectName}
@@ -125,7 +127,7 @@ export default function Index() {
               <Button
                 size="lg"
                 onClick={() => setStep(2)}
-                className="hover-lift"
+                className="hover-lift bg-cost-400 hover:bg-cost-500 text-white px-8 py-6 text-lg rounded-xl shadow-lg transition-all duration-300"
               >
                 + New Project Estimates
               </Button>
@@ -134,7 +136,7 @@ export default function Index() {
         )}
 
         {step === 2 && !showResults && (
-          <div className="space-y-8 animate-fadeIn">
+          <div className="space-y-10 animate-fadeIn max-w-4xl mx-auto">
             <FileUpload />
             <CostDrivers 
               drivers={drivers} 
@@ -146,7 +148,7 @@ export default function Index() {
               <Button
                 size="lg"
                 onClick={handleProcess}
-                className="hover-lift"
+                className="hover-lift bg-cost-400 hover:bg-cost-500 text-white px-8 py-6 text-lg rounded-xl shadow-lg transition-all duration-300"
                 disabled={generateEstimation.isPending}
               >
                 {generateEstimation.isPending ? "Processing..." : "Process Estimation"}
@@ -156,9 +158,9 @@ export default function Index() {
         )}
 
         {showResults && (
-          <div className="space-y-8 animate-fadeIn">
+          <div className="space-y-10 animate-fadeIn">
             <ResultsView {...mockResults} />
-            <div className="flex justify-center gap-4">
+            <div className="flex justify-center gap-6">
               <Button
                 variant="outline"
                 size="lg"
@@ -166,7 +168,7 @@ export default function Index() {
                   setStep(1);
                   setShowResults(false);
                 }}
-                className="hover-lift"
+                className="hover-lift px-6 py-4 text-base"
               >
                 Back to Projects
               </Button>
@@ -176,7 +178,7 @@ export default function Index() {
                   setStep(2);
                   setShowResults(false);
                 }}
-                className="hover-lift"
+                className="hover-lift bg-cost-400 hover:bg-cost-500 text-white px-6 py-4 text-base rounded-xl shadow-lg transition-all duration-300"
               >
                 New Estimation
               </Button>

@@ -32,18 +32,18 @@ interface ResultsViewProps {
 
 export function ResultsView({ fpa, cocomo }: ResultsViewProps) {
   return (
-    <div className="space-y-6 animate-fadeIn">
-      <Card className="glass-card hover:shadow-lg transition-all duration-300">
-        <CardHeader className="border-b bg-primary/5">
+    <div className="space-y-8 animate-fadeIn max-w-5xl mx-auto">
+      <Card className="glass-card hover:shadow-xl transition-all duration-500 overflow-hidden">
+        <CardHeader className="border-b bg-gradient-to-r from-cost-100 to-cost-200 py-8">
           <CardTitle className="flex items-center justify-between">
-            <span>Function Point Analysis</span>
-            <Badge variant="secondary" className="text-lg px-4">
+            <span className="text-2xl font-bold text-cost-400">Function Point Analysis</span>
+            <Badge variant="secondary" className="text-lg px-6 py-2 bg-white/80 text-cost-400">
               Total: {fpa.total}
             </Badge>
           </CardTitle>
         </CardHeader>
-        <CardContent className="pt-6">
-          <Accordion type="single" collapsible className="w-full space-y-2">
+        <CardContent className="pt-8 pb-6">
+          <Accordion type="single" collapsible className="w-full space-y-3">
             {Object.entries(fpa).map(([key, value]) => {
               if (key === 'total') return null;
               const metric = value as FPAMetric;
@@ -59,12 +59,12 @@ export function ResultsView({ fpa, cocomo }: ResultsViewProps) {
                 <AccordionItem 
                   key={key} 
                   value={key}
-                  className="border rounded-lg px-2 hover:bg-accent/50 transition-colors"
+                  className="border rounded-xl px-3 hover:bg-cost-100/50 transition-colors duration-300"
                 >
                   <AccordionTrigger className="py-4 flex items-center gap-2">
                     <div className="flex-1 flex items-center justify-between pr-4">
-                      <span>{title}</span>
-                      <Badge variant="outline" className="ml-2">
+                      <span className="text-cost-400 font-medium">{title}</span>
+                      <Badge variant="outline" className="ml-2 bg-white/80">
                         {metric.count} points
                       </Badge>
                     </div>
@@ -72,7 +72,7 @@ export function ResultsView({ fpa, cocomo }: ResultsViewProps) {
                   <AccordionContent className="pb-4 px-4">
                     <ul className="space-y-2">
                       {metric.modules.map((module, index) => (
-                        <li key={index} className="flex items-center gap-2 text-muted-foreground">
+                        <li key={index} className="flex items-center gap-2 text-muted-foreground hover:text-cost-400 transition-colors">
                           <ChevronRight className="h-4 w-4" />
                           {module}
                         </li>
@@ -86,58 +86,26 @@ export function ResultsView({ fpa, cocomo }: ResultsViewProps) {
         </CardContent>
       </Card>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="glass-card hover:shadow-lg transition-all duration-300">
-          <CardHeader>
-            <CardTitle className="text-lg flex items-center justify-between">
-              Project Size
-              <ArrowUpRight className="h-5 w-5 text-muted-foreground" />
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{cocomo.kloc.toFixed(2)}</div>
-            <p className="text-sm text-muted-foreground">Estimated KLOC</p>
-          </CardContent>
-        </Card>
-
-        <Card className="glass-card hover:shadow-lg transition-all duration-300">
-          <CardHeader>
-            <CardTitle className="text-lg flex items-center justify-between">
-              Development Effort
-              <ArrowUpRight className="h-5 w-5 text-muted-foreground" />
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{cocomo.effort.toFixed(2)}</div>
-            <p className="text-sm text-muted-foreground">Person-Months</p>
-          </CardContent>
-        </Card>
-
-        <Card className="glass-card hover:shadow-lg transition-all duration-300">
-          <CardHeader>
-            <CardTitle className="text-lg flex items-center justify-between">
-              Effort Multiplier
-              <ArrowUpRight className="h-5 w-5 text-muted-foreground" />
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{cocomo.multiplier.toFixed(2)}</div>
-            <p className="text-sm text-muted-foreground">Total Multiplier</p>
-          </CardContent>
-        </Card>
-
-        <Card className="glass-card hover:shadow-lg transition-all duration-300">
-          <CardHeader>
-            <CardTitle className="text-lg flex items-center justify-between">
-              Development Time
-              <ArrowUpRight className="h-5 w-5 text-muted-foreground" />
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold">{cocomo.time.toFixed(2)}</div>
-            <p className="text-sm text-muted-foreground">Months</p>
-          </CardContent>
-        </Card>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {[
+          { title: "Project Size", value: cocomo.kloc.toFixed(2), label: "Estimated KLOC" },
+          { title: "Development Effort", value: cocomo.effort.toFixed(2), label: "Person-Months" },
+          { title: "Effort Multiplier", value: cocomo.multiplier.toFixed(2), label: "Total Multiplier" },
+          { title: "Development Time", value: cocomo.time.toFixed(2), label: "Months" }
+        ].map((item, index) => (
+          <Card key={index} className="glass-card hover:shadow-xl transition-all duration-500">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg flex items-center justify-between text-cost-400">
+                {item.title}
+                <ArrowUpRight className="h-5 w-5 text-muted-foreground" />
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-cost-500">{item.value}</div>
+              <p className="text-sm text-muted-foreground">{item.label}</p>
+            </CardContent>
+          </Card>
+        ))}
       </div>
     </div>
   );
