@@ -7,12 +7,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { CostDriverItem } from "./CostDriverItem";
-import { CostDriver } from "./types";
+import { CostDriver, RatingValue } from "./types";
 
 interface CategoryCardProps {
   category: string;
   drivers: CostDriver[];
-  onValueChange: (id: string, value: number) => void;
+  onValueChange: (id: string, value: RatingValue) => void;
   onModeChange: (id: string, isManual: boolean) => void;
   onIncludeChange: (id: string, isIncluded: boolean) => void;
 }

@@ -8,6 +8,7 @@ import { api } from "@/services/api";
 import { Project } from "@/services/api"; // Import Project type
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { RatingValue } from "@/components/cost-drivers/types";
 
 // Rating labels added here
 const ratingLabels = [
@@ -22,25 +23,25 @@ const ratingLabels = [
 // Initial drivers configuration
 const INITIAL_DRIVERS = [
   // Product Attributes
-  { id: "rely", name: "Required Reliability", category: "Product Attributes", value: "Nominal", isManual: false, isIncluded: true },
-  { id: "data", name: "Database Size", category: "Product Attributes", value: "Nominal", isManual: false, isIncluded: true },
-  { id: "cplx", name: "Product Complexity", category: "Product Attributes", value: "Nominal", isManual: false, isIncluded: true },
+  { id: "rely", name: "Required Reliability", category: "Product Attributes", value: "Nominal" as const, isManual: false, isIncluded: true },
+  { id: "data", name: "Database Size", category: "Product Attributes", value: "Nominal" as const, isManual: false, isIncluded: true },
+  { id: "cplx", name: "Product Complexity", category: "Product Attributes", value: "Nominal" as const, isManual: false, isIncluded: true },
   
   // Platform Attributes
-  { id: "time", name: "Time Constraint", category: "Platform Attributes", value: "Nominal", isManual: false, isIncluded: true },
-  { id: "stor", name: "Storage Constraint", category: "Platform Attributes", value: "Nominal", isManual: false, isIncluded: true },
-  { id: "pvol", name: "Platform Volatility", category: "Platform Attributes", value: "Nominal", isManual: false, isIncluded: true },
+  { id: "time", name: "Time Constraint", category: "Platform Attributes", value: "Nominal" as const, isManual: false, isIncluded: true },
+  { id: "stor", name: "Storage Constraint", category: "Platform Attributes", value: "Nominal" as const, isManual: false, isIncluded: true },
+  { id: "pvol", name: "Platform Volatility", category: "Platform Attributes", value: "Nominal" as const, isManual: false, isIncluded: true },
   
   // Personnel Attributes
-  { id: "acap", name: "Analyst Capability", category: "Personnel Attributes", value: "Nominal", isManual: false, isIncluded: true },
-  { id: "pcap", name: "Programmer Capability", category: "Personnel Attributes", value: "Nominal", isManual: false, isIncluded: true },
-  { id: "aexp", name: "Application Experience", category: "Personnel Attributes", value: "Nominal", isManual: false, isIncluded: true },
-  { id: "pexp", name: "Platform Experience", category: "Personnel Attributes", value: "Nominal", isManual: false, isIncluded: true },
-  { id: "ltex", name: "Language and Tool Experience", category: "Personnel Attributes", value: "Nominal", isManual: false, isIncluded: true },
+  { id: "acap", name: "Analyst Capability", category: "Personnel Attributes", value: "Nominal" as const, isManual: false, isIncluded: true },
+  { id: "pcap", name: "Programmer Capability", category: "Personnel Attributes", value: "Nominal" as const, isManual: false, isIncluded: true },
+  { id: "aexp", name: "Application Experience", category: "Personnel Attributes", value: "Nominal" as const, isManual: false, isIncluded: true },
+  { id: "pexp", name: "Platform Experience", category: "Personnel Attributes", value: "Nominal" as const, isManual: false, isIncluded: true },
+  { id: "ltex", name: "Language and Tool Experience", category: "Personnel Attributes", value: "Nominal" as const, isManual: false, isIncluded: true },
   
   // Project Attributes
-  { id: "tool", name: "Use of Software Tools", category: "Project Attributes", value: "Nominal", isManual: false, isIncluded: true },
-  { id: "sced", name: "Development Schedule", category: "Project Attributes", value: "Nominal", isManual: false, isIncluded: true },
+  { id: "tool", name: "Use of Software Tools", category: "Project Attributes", value: "Nominal" as const, isManual: false, isIncluded: true },
+  { id: "sced", name: "Development Schedule", category: "Project Attributes", value: "Nominal" as const, isManual: false, isIncluded: true },
 ];
 
 export default function Index() {
@@ -67,7 +68,7 @@ export default function Index() {
     },
   });
 
-  const handleDriverChange = (id: string, value: string) => {
+  const handleDriverChange = (id: string, value: RatingValue) => {
     setDrivers(prevDrivers => 
       prevDrivers.map(driver => 
         driver.id === id ? { ...driver, value } : driver
