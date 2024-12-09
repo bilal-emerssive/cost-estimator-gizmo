@@ -57,7 +57,7 @@ export const api = {
     requirementsDocument: File;
     costDrivers: Array<{
       driver: string;
-      value: "Very Low" | "Low" | "Nominal" | "High" | "Very High" | "Extra High" | null;
+      value: "Very Low" | "Low" | "Nominal" | "High" | "Very High" | "Extra High" | "Null";
     }>;
   }): Promise<Project> => {
     try {
