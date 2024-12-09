@@ -26,7 +26,7 @@ export default function Index() {
       .filter(driver => driver.isIncluded)
       .map(driver => ({
         driver: driver.id,
-        value: driver.isManual ? driver.value : "Null" as const,
+        value: driver.isManual ? (driver.value as RatingValue) : "Null" as const,
       }));
   
     generateEstimation.mutate({
