@@ -7,6 +7,7 @@ import { api } from "@/services/api";
 import { Project } from "@/services/api";
 import { useQuery } from "@tanstack/react-query";
 import { useEstimation } from "@/components/estimation/useEstimation";
+import { RatingValue } from "@/components/cost-drivers/types";
 
 export default function Index() {
   const { 
