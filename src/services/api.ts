@@ -29,13 +29,14 @@ export const ProjectSchema = z.object({
     projectSize: z.number(),
     developmentEffort: z.number(),
     effortMultiplier: z.number(),
-    developmentTime: z.number()
+    developmentTime: z.number(),
+    estimatedKLOC: z.number(),
+    totalFunctionPoints: z.number()
   })
 });
 
 export type Project = z.infer<typeof ProjectSchema>;
 
-// Replace these with your actual API endpoints
 const API_BASE_URL = "http://127.0.0.1:5000";
 
 export const api = {

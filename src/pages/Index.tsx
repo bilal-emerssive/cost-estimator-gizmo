@@ -102,24 +102,9 @@ export default function Index() {
           </div>
         )}
 
-        {showResults && (
+        {showResults && generateEstimation.data && (
           <div className="space-y-10 animate-fadeIn">
-            <ResultsView 
-              fpa={{
-                ei: { count: 0, modules: [] },
-                eo: { count: 0, modules: [] },
-                eq: { count: 0, modules: [] },
-                ilf: { count: 0, modules: [] },
-                eif: { count: 0, modules: [] },
-                total: 0
-              }}
-              cocomo={{
-                kloc: 0,
-                effort: 0,
-                multiplier: 0,
-                time: 0
-              }}
-            />
+            <ResultsView data={generateEstimation.data} />
             <div className="flex justify-center gap-6">
               <Button
                 variant="outline"
